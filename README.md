@@ -1,6 +1,6 @@
-# NodeJS Challenge Backend
+# NodeJS Challenge
 
-This is the backend part of the NodeJS Challenge project. It is built with Node.js, Express, and Prisma, and connects to a MySQL database.
+This is the NodeJS Challenge project. It is built with Node.js, Express, and Prisma, and connects to a MySQL database.
 
 ## Table of Contents
 
