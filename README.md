@@ -33,11 +33,12 @@ This is the backend part of the NodeJS Challenge project. It is built with Node.
    ```bash
    git clone https://github.com/jetsunnalgonda/nodejs-challenge.git
    cd nodejs-challenge
+    ```
 
 2. Install dependencies:
    ```bash
    npm install
-
+    ```
 3. Set up your environment variables. Create a .env file in the root directory and add the following:
    ```env
    PORT=3010
@@ -46,19 +47,19 @@ This is the backend part of the NodeJS Challenge project. It is built with Node.
    DB_PASSWORD=password
    DB_NAME=your_database
    JWT_SECRET=your_jwt_secret
-
+    ```
 4. Run database migrations:
     ```bash
     npx prisma migrate dev
-
+    ```
 5. Seed the database:
     ```bash
     npm seed
-
+    ```
 6. Start the server:
     ```bash
     npm start
-
+    ```
 ## Usage
 
 - The backend server runs on http://localhost:3010.
@@ -72,8 +73,7 @@ This is the backend part of the NodeJS Challenge project. It is built with Node.
 - POST /login: Authenticate a user. Requires email and password.
 
 ### Example server-side WebSocket code:
-
-    ```javascript
+```javascript
     const WebSocket = require('ws');
 
     const wss = new WebSocket.Server({ port: 3020 });
@@ -93,6 +93,7 @@ This is the backend part of the NodeJS Challenge project. It is built with Node.
 
     ws.send(JSON.stringify({ action: 'welcome', message: 'Connection established' }));
     });
+```
 
 ## Frontend
 ### Technologies
@@ -128,8 +129,7 @@ The frontend application runs on http://localhost:3011.
 - `MapPopup.vue`: Displays a Google Map in a popup for location selection.
 
 ### Example WebSocket setup in Vue component:
-
-    ```javascript
+```javascript
     export default {
     name: 'HomePage',
     data() {
@@ -170,6 +170,7 @@ The frontend application runs on http://localhost:3011.
         },
     },
     };
+```
 
 ## Contributing
 Feel free to submit issues or pull requests. Please follow the existing code style and write tests for any new features.
