@@ -1,0 +1,32 @@
+node_modules
+# Keep environment variables out of version control
+.env
+.env.*.local
+.env.production
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Temporary backup files
+app_old.js
+
+# Other files
+certificate.crt
+private.key
+/uploads
+sql_dumps
+explanation.txt
+nodejsdatabase_dump.sql
+.DS_Store
