@@ -1,0 +1,34 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id       String   @id @default(cuid())
+  name     String
+  email    String   @unique
+  password String
+  avatars  Avatar[]
+  bio      String?
+  location Location @relation(fields: [locationId], references: [id])
+  locationId String
+}
+
+model Avatar {
+  id     String  @id @default(cuid())
+  url    String
+  userId String
+  user   User    @relation(fields: [userId], references: [id])
+}
+
+model Location {
+  id        String   @id @default(cuid())
+  latitude  Float
+  longitude Float
+  placeName String?
+  user      User[]
+}
