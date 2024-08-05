@@ -2,7 +2,7 @@ node_modules
 # Keep environment variables out of version control
 .env
 .env.*.local
-
+.env.production
 
 # Log files
 npm-debug.log*
@@ -29,3 +29,4 @@ private.key
 sql_dumps
 explanation.txt
 nodejsdatabase_dump.sql
+.DS_Store
