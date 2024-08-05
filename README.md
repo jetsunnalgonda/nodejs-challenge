@@ -17,6 +17,7 @@ This is the backend part of the NodeJS Challenge project. It is built with Node.
     - [Components](#components)
 - [Contributing](#contributing)
 - [License](#license)
+- [Author](#author)
 
 
 ## Backend
@@ -177,4 +178,12 @@ Feel free to submit issues or pull requests. Please follow the existing code sty
 
 ## License
 This project is licensed under the MIT License.
+
+## Author
+
+[@jetsunnalgonda](https://www.github.com/jetsunnalgonda)
+
+Programmed by Haluk Isik.
+
+August 2024
 
