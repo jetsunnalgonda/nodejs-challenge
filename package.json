@@ -9,8 +9,7 @@
     "start": "node app.js",
     "migrate": "node ./migrate.js",
     "seed": "node ./seed.js",
-    "build": "prisma generate && npm run migrate",
-    "postinstall": "npm run seed"
+    "build": "prisma generate && npm run migrate"
   },
   "author": "Haluk Isik",
   "license": "ISC",
