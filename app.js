@@ -14,19 +14,24 @@ import https from 'https';
 import { WebSocketServer } from 'ws';
 // import bodyParser from 'body-parser';
 
-const options = {
-    key: fs.readFileSync('private.key'),
-    cert: fs.readFileSync('certificate.crt'),
-};
+// const options = {
+//     key: fs.readFileSync('private.key'),
+//     cert: fs.readFileSync('certificate.crt'),
+// };
 
-const WEBSOCKET_PORT = process.env.WEBSOCKET_PORT
+// const WEBSOCKET_PORT = process.env.WEBSOCKET_PORT
 const app = express();
-const server = https.createServer(options, app);
+// const server = https.createServer(options, app);
+const server = https.createServer(app);
 
 // const server = https.createServer(options, app).listen(3010, () => {
 //     console.log('HTTPS server running on port 3010');
 // });
-const wss = new WebSocketServer({ port: WEBSOCKET_PORT });
+// For local server use
+// const wss = new WebSocketServer({ port: WEBSOCKET_PORT });
+
+const wss = new WebSocketServer({ server });
+
 
 // app.use(bodyParser.json());
 
