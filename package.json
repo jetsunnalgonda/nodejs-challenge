@@ -8,7 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
     "migrate": "node ./migrate.js",
-    "seed": "node ./seed.js"
+    "seed": "node ./seed.js",
+    "postinstall": "prisma generate && npm run migrate && npm run seed"
   },
   "author": "Haluk Isik",
   "license": "ISC",
