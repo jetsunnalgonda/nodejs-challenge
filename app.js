@@ -14,6 +14,16 @@ import https from 'https';
 import { WebSocketServer } from 'ws';
 // import bodyParser from 'body-parser';
 
+import AWS from 'aws-sdk';
+
+AWS.config.update({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: process.env.AWS_REGION,
+});
+
+const s3 = new AWS.S3();
+
 // const options = {
 //     key: fs.readFileSync('private.key'),
 //     cert: fs.readFileSync('certificate.crt'),
@@ -94,25 +104,24 @@ wss.on('connection', (ws) => {
 });
 
 // Ensure the uploads directory exists
-const uploadDir = './uploads';
-// Uploads will be handled in the frontend
+// const uploadDir = './uploads';
+// **** Uploads will be handled by the cloud storage ****************
 // if (!fs.existsSync(uploadDir)) {
 //     fs.mkdirSync(uploadDir);
 // }
-
-app.use('/uploads', express.static('uploads'));
-
+// app.use('/uploads', express.static('uploads'));
 // Set up multer for file uploads
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads');
-    },
-    filename: (req, file, cb) => {
-        const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1E9)}`;
-        cb(null, `${uniqueSuffix}-${file.originalname}`);
-    },
-});
-const upload = multer({ storage });
+// const storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         cb(null, 'uploads');
+//     },
+//     filename: (req, file, cb) => {
+        // const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1E9)}`;
+        // cb(null, `${uniqueSuffix}-${file.originalname}`);
+//     },
+// });
+// const upload = multer({ storage });
+// ****************************************************************
 
 // Middleware to protect routes
 const authenticateJWT = (req, res, next) => {
@@ -136,6 +145,23 @@ function kmToDegreesLongitude(km, latitude) {
     return km / (111 * Math.cos(latitude * Math.PI / 180));
 }
 
+app.get('/presigned-url', (req, res) => {
+    const { filename } = req.query;
+    const params = {
+        Bucket: process.env.S3_BUCKET_NAME,
+        Key: filename,
+        Expires: 60, // URL expiry time in seconds
+        ContentType: req.query.filetype,
+    };
+
+    s3.getSignedUrl('putObject', params, (err, url) => {
+        if (err) {
+            return res.status(500).send(err);
+        }
+        res.json({ url });
+    });
+});
+
 // Register route
 app.post('/register', upload.array('avatars', 5), async (req, res) => {
     console.log('Files:', req.files);
@@ -150,10 +176,24 @@ app.post('/register', upload.array('avatars', 5), async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Handle avatars array
-        const avatars = avatarFiles.length > 0
-            ? avatarFiles.map(file => ({ url: file.path }))
-            : []; // Handle case where no files are uploaded
+        // const avatars = avatarFiles.length > 0
+        //     ? avatarFiles.map(file => ({ url: file.path }))
+        //     : []; // Handle case where no files are uploaded
 
+        // Upload files to S3
+        const avatarUrls = [];
+        for (const file of avatarFiles) {
+            const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1E9)}`;
+            const uploadParams = {
+                Bucket: process.env.S3_BUCKET_NAME,
+                Key: `avatars/${uniqueSuffix}-${file.originalname}`, // Unique filename
+                Body: file.buffer,
+                ContentType: file.mimetype,
+            };
+
+            const uploadResult = await s3.upload(uploadParams).promise();
+            avatarUrls.push(uploadResult.Location); // URL of the uploaded file
+        }
         // Ensure location is parsed correctly
         let locationData = {};
         try {
@@ -174,7 +214,7 @@ app.post('/register', upload.array('avatars', 5), async (req, res) => {
                 email,
                 password: hashedPassword,
                 bio,
-                avatars: avatars.length > 0 ? { create: avatars } : undefined,
+                avatars: avatars.length > 0 ? { create: avatarUrls.map(url => ({ url })) } : undefined,
                 location: {
                     create: {
                         latitude: locationData.latitude || null, // Default to null if not provided
