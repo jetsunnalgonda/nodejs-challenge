@@ -95,9 +95,10 @@ wss.on('connection', (ws) => {
 
 // Ensure the uploads directory exists
 const uploadDir = './uploads';
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir);
-}
+// Uploads will be handled in the frontend
+// if (!fs.existsSync(uploadDir)) {
+//     fs.mkdirSync(uploadDir);
+// }
 
 app.use('/uploads', express.static('uploads'));
 
