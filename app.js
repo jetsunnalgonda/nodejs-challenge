@@ -145,6 +145,10 @@ function kmToDegreesLongitude(km, latitude) {
     return km / (111 * Math.cos(latitude * Math.PI / 180));
 }
 
+router.get('/test', (req, res) => {
+    res.status(200).json({ message: 'Backend is working!' });
+});
+
 app.get('/presigned-url', (req, res) => {
     const { filename } = req.query;
     const params = {
