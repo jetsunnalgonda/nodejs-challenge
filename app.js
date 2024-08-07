@@ -116,8 +116,8 @@ wss.on('connection', (ws) => {
 //         cb(null, 'uploads');
 //     },
 //     filename: (req, file, cb) => {
-        // const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1E9)}`;
-        // cb(null, `${uniqueSuffix}-${file.originalname}`);
+// const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1E9)}`;
+// cb(null, `${uniqueSuffix}-${file.originalname}`);
 //     },
 // });
 // const upload = multer({ storage });
@@ -144,6 +144,10 @@ const KM_TO_DEGREES_LAT = 1 / 111; // Approximate conversion factor from km to d
 function kmToDegreesLongitude(km, latitude) {
     return km / (111 * Math.cos(latitude * Math.PI / 180));
 }
+
+app.get('/', (req, res) => {
+    res.send('Hello World!');
+});
 
 router.get('/test', (req, res) => {
     res.status(200).json({ message: 'Backend is working!' });
